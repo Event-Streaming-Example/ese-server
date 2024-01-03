@@ -15,7 +15,7 @@ A combination of Grafana and Prometheus has been used to publish the metrics of 
 
 ## Prerequisites
 
-Install the below mentioned docker images.
+Install the below-mentioned docker images.
 
 ```bash
 docker pull redis/redis-stack-server
@@ -28,11 +28,19 @@ docker pull saumyabhatt10642/ese-server
 
 ## Local Setup
 
-In order to get the application running, just start the redis stack and run the following commands
+In order to get the application running, just start the Redis stack and run the following commands
 
 ```bash
 docker run -p 6379:6379 -d --name redis-local-server redis/redis-stack-server
 docker run -p -it 2000:2000 --name ese-local-server saumyabhatt10642/ese-server
+```
+
+Or if you don't have docker and want to run the Go commands directly:
+
+```bash
+cd src
+go get .
+go run .
 ```
 
 __Postman Collection__ : [JSON File](./files/Postman%20Collection.json)
@@ -41,7 +49,7 @@ __Postman Collection__ : [JSON File](./files/Postman%20Collection.json)
 
 ## Setting up the Dashboard
 
-Run the Grafana and the prometheus images to setup metric collection and visualization.
+Run the Grafana and the Prometheus images to set up metric collection and visualization.
 
 ```bash
 docker run -p 9090:9090 --name prometheus-local-server -v ./properties/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
@@ -54,20 +62,20 @@ __Username :__ admin
 
 __Password :__ admin
 
-Import [this](./files/ESE%20Server%20Grafana%20Dashboard.json) file to setup the dashboard. When prompted to provide a data source, connect to the
+Import [this](./files/ESE%20Server%20Grafana%20Dashboard.json) file to set up the dashboard. When prompted to provide a data source, connect to the
 __Prometheus Datasource URL :__ `http://host.docker.internal:9090`
 
 ---
 
 ## Exposing Server to your local network
 
-If on linux or Mac, run the following command to get the IP of the machine on which your Gin server is running
+If on Linux or Mac, run the following command to get the IP of the machine on which your Gin server is running
 
 ```bash
 ifconfig | grep netmask
 ```
 
-- Make sure the device which the server is running and the machine you want to connect to is on the same network.
+- Make sure the device that the server is running and the machine you want to connect to is on the same network.
 - Get the broadcast IP address that is returned as a result of the above query.
 - `<ip address>:2000` is where your device could connect to access the Gin server.
 
