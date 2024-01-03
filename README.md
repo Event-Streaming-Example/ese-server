@@ -13,48 +13,17 @@ A combination of Grafana and Prometheus has been used to publish the metrics of 
 
 ---
 
-## Prerequisites
-
-Install the below-mentioned docker images.
-
-```bash
-docker pull redis/redis-stack-server
-docker pull prom/prometheus
-docker pull grafana/grafana
-docker pull saumyabhatt10642/ese-server
-```
-
----
-
 ## Local Setup
 
-In order to get the application running, just start the Redis stack and run the following commands
+Running the following command will download all the required images, create a network for them to communicate and run the application on `localhost:2000`
 
 ```bash
-docker run -p 6379:6379 -d --name redis-local-server redis/redis-stack-server
-docker run -it -p 2000:2000 --name ese-local-server saumyabhatt10642/ese-server
-```
-
-Or if you don't have docker and want to run the Go commands directly:
-
-```bash
-cd src
-go get .
-go run .
+docker-compose up -d
 ```
 
 __Postman Collection__ : [JSON File](./files/Postman%20Collection.json)
 
----
-
-## Setting up the Dashboard
-
-Run the Grafana and the Prometheus images to set up metric collection and visualization.
-
-```bash
-docker run -p 9090:9090 --name prometheus-local-server -v ./src/properties/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
-docker run -p 3000:3000 --name grafana-local-server grafana/grafana
-```
+### Connecting to Grafana
 
 Log in to the local Grafana dashboard using the following credentials:
 
@@ -88,7 +57,7 @@ If you have made changes to the application, publish a new image with the follow
 [DockerHub Repository](https://hub.docker.com/repository/docker/saumyabhatt10642/ese-server/general)
 
 ```bash
-docker image build -t ese-client:tag .
-docker image tag ese-client:tag saumyabhatt10642/ese-client:tag
-docker push saumyabhatt10642/ese-client:tag
+docker image build -t ese-server:tag .
+docker image tag ese-server:tag saumyabhatt10642/ese-server:tag
+docker push saumyabhatt10642/ese-server:tag
 ```

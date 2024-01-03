@@ -7,4 +7,8 @@ scrape_configs:
   - job_name: 'ese-server'
     scrape_interval: 1s
     static_configs:
-      - targets: ['host.docker.internal:2000']
+      - targets: ['host.docker.internal:2000','localhost:2000','ese-local-server:2000']
+  - job_name: 'redis'
+    scrape_interval: 1s
+    static_configs:
+      - targets: ['host.docker.internal:6379','localhost:6379','redis-local-server']
