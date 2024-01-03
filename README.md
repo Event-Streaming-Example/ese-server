@@ -52,7 +52,7 @@ __Postman Collection__ : [JSON File](./files/Postman%20Collection.json)
 Run the Grafana and the Prometheus images to set up metric collection and visualization.
 
 ```bash
-docker run -p 9090:9090 --name prometheus-local-server -v ./properties/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+docker run -p 9090:9090 --name prometheus-local-server -v ./src/properties/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 docker run -p 3000:3000 --name grafana-local-server grafana/grafana
 ```
 
