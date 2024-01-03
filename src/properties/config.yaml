@@ -3,6 +3,6 @@ server:
   port: 2000
 
 redis:
-  url: redis
+  url: redis-server
   port: 6379
   expiryInMinutes: 5

@@ -153,7 +153,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(go_threads[$__interval])",
+          "expr": "changes(go_threads{instance=\"ese-server:2000\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -163,7 +163,7 @@
           "useBackend": false
         }
       ],
-      "title": "No. of threads spawned",
+      "title": "Threads spawned",
       "type": "timeseries"
     },
     {
@@ -252,7 +252,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(go_goroutines[$__interval])",
+          "expr": "changes(go_goroutines{instance=\"ese-server:2000\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -262,7 +262,7 @@
           "useBackend": false
         }
       ],
-      "title": "No. of Goroutines spawned",
+      "title": "Goroutines spawned",
       "type": "timeseries"
     },
     {
@@ -351,7 +351,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "go_memstats_heap_alloc_bytes",
+          "expr": "go_memstats_heap_alloc_bytes{instance=\"ese-server:2000\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -362,6 +362,105 @@
         }
       ],
       "title": "Heap memory allocated",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "changes(process_open_fds{instance=\"ese-server:2000\"}[$__interval])",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Open File Descriptors",
       "type": "timeseries"
     },
     {
@@ -464,7 +563,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(health_ping_count[$__interval])",
+          "expr": "changes(health_ping_count{instance=\"ese-server:2000\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -474,7 +573,7 @@
           "useBackend": false
         }
       ],
-      "title": "Health Pings Request Count",
+      "title": "GET /",
       "type": "timeseries"
     },
     {
@@ -564,7 +663,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(add_event_ping_count[$__interval])",
+          "expr": "changes(add_event_ping_count{instance=\"ese-server:2000\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -574,7 +673,7 @@
           "useBackend": false
         }
       ],
-      "title": "Add Single Event Request Count",
+      "title": "POST /event",
       "type": "timeseries"
     },
     {
@@ -664,7 +763,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(add_events_ping_count[$__interval])",
+          "expr": "changes(add_events_ping_count{instance=\"ese-server:2000\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -674,7 +773,7 @@
           "useBackend": false
         }
       ],
-      "title": "Add Multiple Events Request Count",
+      "title": "POST /events",
       "type": "timeseries"
     },
     {
@@ -763,9 +862,9 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "events_counter",
+          "expr": "events_counter{instance=\"ese-server:2000\"}",
           "fullMetaSearch": false,
-          "includeNullMetadata": true,
+          "includeNullMetadata": false,
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -784,13 +883,13 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "ESE Server Metrics",
   "uid": "c33c4d99-3f05-4ec4-a651-7c1398f06391",
-  "version": 15,
+  "version": 11,
   "weekStart": ""
 }
