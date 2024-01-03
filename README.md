@@ -6,10 +6,10 @@ Connecting redis here is meant to serve as an example of how a dummy service can
 
 A combination of Grafana and Prometheus has been used to publish the metrics of our service and observe its performance.
 
-- __Language__ : [Go](https://go.dev/doc/)
-- __HTTP Framework__ : [Gin](https://gin-gonic.com/docs/)
-- __Database__ : [Redis](https://redis.io/docs/connect/clients/go/), [Prometheus (time-series)](https://prometheus.io/docs/prometheus/latest/getting_started/)
-- __Observability__ : [Grafana](https://grafana.com/docs/grafana/latest/)
+- **Language** : [Go](https://go.dev/doc/)
+- **HTTP Framework** : [Gin](https://gin-gonic.com/docs/)
+- **Database** : [Redis](https://redis.io/docs/connect/clients/go/), [Prometheus (time-series)](https://prometheus.io/docs/prometheus/latest/getting_started/)
+- **Observability** : [Grafana](https://grafana.com/docs/grafana/latest/)
 
 ---
 
@@ -21,18 +21,18 @@ Running the following command will download all the required images, create a ne
 docker-compose up -d
 ```
 
-__Postman Collection__ : [JSON File](./files/Postman%20Collection.json)
+**Postman Collection** : [JSON File](./files/Postman%20Collection.json)
 
 ### Connecting to Grafana
 
 Log in to the local Grafana dashboard using the following credentials:
 
-__Username :__ admin
+**Username :** admin
 
-__Password :__ admin
+**Password :** admin
 
 Import [this](./files/ESE%20Server%20Grafana%20Dashboard.json) file to set up the dashboard. When prompted to provide a data source, connect to the
-__Prometheus Datasource URL :__ `http://host.docker.internal:9090`
+**Prometheus Datasource URL :** `http://prometheus-server:9090`
 
 ---
 

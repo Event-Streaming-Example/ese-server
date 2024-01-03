@@ -4,11 +4,14 @@ global:
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
 scrape_configs:
-  - job_name: 'ese-server'
+  - job_name: "ese-server"
     scrape_interval: 1s
     static_configs:
-      - targets: ['host.docker.internal:2000','localhost:2000','ese-local-server:2000']
-  - job_name: 'redis'
+      - targets:
+          ["ese-server:2000", "host.docker.internal:2000", "localhost:2000"]
+
+  - job_name: "redis"
     scrape_interval: 1s
     static_configs:
-      - targets: ['host.docker.internal:6379','localhost:6379','redis-local-server']
+      - targets:
+          ["redis-server:6379", "host.docker.internal:6379", "localhost:6379"]
