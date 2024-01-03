@@ -32,7 +32,7 @@ In order to get the application running, just start the Redis stack and run the 
 
 ```bash
 docker run -p 6379:6379 -d --name redis-local-server redis/redis-stack-server
-docker run -p -it 2000:2000 --name ese-local-server saumyabhatt10642/ese-server
+docker run -it -p 2000:2000 --name ese-local-server saumyabhatt10642/ese-server
 ```
 
 Or if you don't have docker and want to run the Go commands directly:
