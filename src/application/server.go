@@ -36,7 +36,7 @@ func provideRouter(redisClient *data.RedisClient) gin.Engine {
 	prometheus.MustRegister(healthCounter)
 	prometheus.MustRegister(addEventCounter)
 	prometheus.MustRegister(addEventsCounter)
-	prometheus.MustRegister(eventsCounter)
+	prometheus.MustRegister(getEventsCounter)
 
 	router := gin.Default()
 	usecases := Usecases{

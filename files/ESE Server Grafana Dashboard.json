@@ -781,6 +781,7 @@
         "type": "prometheus",
         "uid": "${DS_PROMETHEUS}"
       },
+      "description": "No. of requests handled by get events handler",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -862,7 +863,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "events_counter{instance=\"ese-server:2000\"}",
+          "expr": "changes(get_events_ping_count{instance=\"ese-server:2000\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "instant": false,
@@ -872,7 +873,7 @@
           "useBackend": false
         }
       ],
-      "title": "Total number of events pushed",
+      "title": "GET /events",
       "type": "timeseries"
     }
   ],
@@ -883,13 +884,13 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "ESE Server Metrics",
   "uid": "c33c4d99-3f05-4ec4-a651-7c1398f06391",
-  "version": 11,
+  "version": 2,
   "weekStart": ""
 }
