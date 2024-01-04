@@ -25,7 +25,7 @@ docker-compose up -d
 
 ### Connecting to Grafana
 
-Log in to the local Grafana dashboard using the following credentials:
+Log in to the local Grafana dashboard using the following credentials. The dashboard is hosted at `http://localhost:3000`
 
 **Username :** admin
 
