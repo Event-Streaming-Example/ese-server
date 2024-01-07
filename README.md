@@ -13,7 +13,17 @@ A combination of Grafana and Prometheus has been used to publish the metrics of 
 
 ---
 
-## Local Setup
+## Running Locally
+
+1. If you are running redis locally, make sure to change it in the [config.yaml](./src/properties/config.yaml) to reflect it accordingly. Start your redis server
+2. Install the required dependencies by running `go mod .`
+3. Start the ese-server by running `go run .`
+
+**Note :** In order to get the metrics, start your prometheus and grafana server seperately.
+
+---
+
+## Running via Docker (Recommended)
 
 Running the following command will download all the required images, create a network for them to communicate and run the application on `localhost:2000`
 
@@ -23,7 +33,9 @@ docker-compose up -d
 
 **Postman Collection** : [JSON File](./files/Postman%20Collection.json)
 
-### Connecting to Grafana
+---
+
+## Connecting to Grafana
 
 Log in to the local Grafana dashboard using the following credentials. The dashboard is hosted at `http://localhost:3000`
 
