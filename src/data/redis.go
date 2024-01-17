@@ -45,7 +45,8 @@ func (r *RedisClient) AddEvent(event Event) {
 	}
 
 	// Set expiration for the key
-	err = r.client.Expire(r.context, event.IP, 5*time.Minute).Err()
+	expirationTime := time.Duration(r.expiryInMinutes) * time.Minute
+	err = r.client.Expire(r.context, event.IP, expirationTime).Err()
 	if err != nil {
 		log.Fatal("Error setting expiration:", err)
 		return

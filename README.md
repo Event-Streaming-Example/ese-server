@@ -15,9 +15,19 @@ A combination of Grafana and Prometheus has been used to publish the metrics of 
 
 ## Running Locally
 
-1. If you are running redis locally, make sure to change it in the [config.yaml](./src/properties/config.yaml) to reflect it accordingly. Start your redis server
-2. Install the required dependencies by running `go mod .`
-3. Start the ese-server by running `go run .`
+```bash
+# This will start redis locally on mac on localhost:6379. Make sure to change your settings accordingly in the config.yaml file
+brew services start redis
+
+# Move to the working folder
+cd src
+
+# Install the required dependencies
+go get .
+
+# Specify the port on which you want the application to run
+SERVER_PORT=2000 go run .
+```
 
 **Note :** In order to get the metrics, start your prometheus and grafana server seperately.
 
@@ -25,11 +35,13 @@ A combination of Grafana and Prometheus has been used to publish the metrics of 
 
 ## Running via Docker (Recommended)
 
-Running the following command will download all the required images, create a network for them to communicate and run the application on `localhost:2000`
+Running the following command will download all the required images, create a network for them to communicate and run 2 instances of the application on `localhost:2001` and `localhost:2002`
 
 ```bash
 docker-compose up -d
 ```
+
+**Note :** In the `docker-compose.yml` file, specify whether you want to run the localy built docker image of the ese-server or the remote one.
 
 **Postman Collection** : [JSON File](./files/Postman%20Collection.json)
 
