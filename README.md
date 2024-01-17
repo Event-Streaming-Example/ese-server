@@ -39,23 +39,23 @@ SERVER_PORT=2000 go run .
 
 ## Running via Docker
 
-If one doesn't want to run the below given commands and directly use docker compose: `docker-compose up -d` in the files folder.
+If one doesn't want to run the below given commands and directly use docker compose: `docker-compose -p ese-sever-singular up -d`.
 
 ```bash
 # First create a network where all the containers will reside in
-docker network create ese-backend-network
+docker network create ese-server-network
 
 # Start the redis container and attatch it to our custom network
-docker run -d --name redis-server --network ese-backend-network -p 6379:6379 redis
+docker run -d --name redis-server --network ese-server-network -p 6379:6379 redis
 
 # Start the ESE Server on port 2000 and attatch it to our custom network
-docker run -d --name ese-server1 --network ese-backend-network -e SERVER_PORT=2001 -p 2001:2001 saumyabhatt10642/ese-server
+docker run -d --name ese-server1 --network ese-server-network -e SERVER_PORT=2001 -p 2001:2001 saumyabhatt10642/ese-server
 
 # Start the Prometheus Server and attatch it to our custom network
-docker run -d --name prometheus-server --network ese-backend-network -p 9090:9090 -v $(pwd)/src/properties/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+docker run -d --name prometheus-server --network ese-server-network -p 9090:9090 -v $(pwd)/src/properties/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 
 # Start the Grafana Server and attatch it to our custom network
-docker run -d --name grafana-server --network ese-backend-network -p 3000:3000 grafana/grafana
+docker run -d --name grafana-server --network ese-server-network -p 3000:3000 grafana/grafana
 ```
 
 ---
