@@ -41,6 +41,8 @@ Running the following command will download all the required images, create a ne
 docker-compose up -d
 ```
 
+**Note :** In the `docker-compose.yml` file, specify whether you want to run the localy built docker image of the ese-server or the remote one.
+
 **Postman Collection** : [JSON File](./files/Postman%20Collection.json)
 
 ---

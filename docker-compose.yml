@@ -3,6 +3,7 @@ services:
 
   # SERVER 1 RUNNING ON PORT 2001
   ese-server1:
+    # image: saumyabhatt10642/ese-server
     image: ese-server:latest
     environment:
       - SERVER_PORT=2001
@@ -13,6 +14,7 @@ services:
 
 # SERVER 2 RUNNING ON PORT 2002
   ese-server2:
+    # image: saumyabhatt10642/ese-server
     image: ese-server:latest
     environment:
       - SERVER_PORT=2002
@@ -23,6 +25,7 @@ services:
 
 # ANALYTICS SERVER RUNNING ON PORT 2003
   ese-server-analytics:
+    # image: saumyabhatt10642/ese-server
     image: ese-server:latest
     environment:
       - SERVER_PORT=2003
