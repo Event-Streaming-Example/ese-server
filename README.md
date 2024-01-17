@@ -15,6 +15,8 @@ A combination of Grafana and Prometheus has been used to publish the metrics of 
 
 ## Running Locally
 
+Before running the below commands, uncomment the redis configs in the [configs.yaml](./src/properties/config.yaml) so that your redis URL is pointing to where it is running locally on your machine.
+
 ```bash
 # This will start redis locally on mac on localhost:6379. Make sure to change your settings accordingly in the config.yaml file
 brew services start redis
@@ -31,19 +33,30 @@ SERVER_PORT=2000 go run .
 
 **Note :** In order to get the metrics, start your prometheus and grafana server seperately.
 
+**Postman Collection** : [JSON File](./files/Postman%20Collection.json)
+
 ---
 
-## Running via Docker (Recommended)
+## Running via Docker
 
-Running the following command will download all the required images, create a network for them to communicate and run 2 instances of the application on `localhost:2001` and `localhost:2002`
+If one doesn't want to run the below given commands and directly use docker compose: `docker-compose up -d` in the files folder.
 
 ```bash
-docker-compose up -d
+# First create a network where all the containers will reside in
+docker network create ese-backend-network
+
+# Start the redis container and attatch it to our custom network
+docker run -d --name redis-server --network ese-backend-network -p 6379:6379 redis
+
+# Start the ESE Server on port 2000 and attatch it to our custom network
+docker run -d --name ese-server1 --network ese-backend-network -e SERVER_PORT=2001 -p 2001:2001 saumyabhatt10642/ese-server
+
+# Start the Prometheus Server and attatch it to our custom network
+docker run -d --name prometheus-server --network ese-backend-network -p 9090:9090 -v $(pwd)/src/properties/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+
+# Start the Grafana Server and attatch it to our custom network
+docker run -d --name grafana-server --network ese-backend-network -p 3000:3000 grafana/grafana
 ```
-
-**Note :** In the `docker-compose.yml` file, specify whether you want to run the localy built docker image of the ese-server or the remote one.
-
-**Postman Collection** : [JSON File](./files/Postman%20Collection.json)
 
 ---
 
@@ -57,20 +70,6 @@ Log in to the local Grafana dashboard using the following credentials. The dashb
 
 Import [this](./files/ESE%20Server%20Grafana%20Dashboard.json) file to set up the dashboard. When prompted to provide a data source, connect to the
 **Prometheus Datasource URL :** `http://prometheus-server:9090`
-
----
-
-## Exposing Server to your local network
-
-If on Linux or Mac, run the following command to get the IP of the machine on which your Gin server is running
-
-```bash
-ifconfig | grep netmask
-```
-
-- Make sure the device that the server is running and the machine you want to connect to is on the same network.
-- Get the broadcast IP address that is returned as a result of the above query.
-- `<ip address>:2000` is where your device could connect to access the Gin server.
 
 ---
 
