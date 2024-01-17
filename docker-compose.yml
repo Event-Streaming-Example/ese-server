@@ -11,13 +11,23 @@ services:
     depends_on:
       - redis-server
 
-# SERVER 1 RUNNING ON PORT 2002
+# SERVER 2 RUNNING ON PORT 2002
   ese-server2:
     image: ese-server:latest
     environment:
       - SERVER_PORT=2002
     ports:
       - "2002:2002"
+    depends_on:
+      - redis-server
+
+# ANALYTICS SERVER RUNNING ON PORT 2003
+  ese-server-analytics:
+    image: ese-server:latest
+    environment:
+      - SERVER_PORT=2003
+    ports:
+      - "2003:2003"
     depends_on:
       - redis-server
 

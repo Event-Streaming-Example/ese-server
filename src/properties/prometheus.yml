@@ -8,13 +8,13 @@ scrape_configs:
     scrape_interval: 1s
     static_configs:
       - targets:
-          ["ese-server1:2001", "ese-server2:2002"]
+          ["ese-server1:2001", "ese-server2:2002", "ese-server-analytics:2003"]
 
   - job_name: "ese-server-localhost"
     scrape_interval: 1s
     static_configs:
       - targets:
-          ["localhost:2001", "localhost:2002"]
+          ["localhost:2001", "localhost:2002", "localhost:2003"]
 
   - job_name: "redis"
     scrape_interval: 1s
