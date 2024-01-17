@@ -1,35 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "10.2.3"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -50,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -70,7 +39,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
       },
       "fieldConfig": {
         "defaults": {
@@ -149,11 +118,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(go_threads{instance=\"ese-server:2000\"}[$__interval])",
+          "expr": "changes(go_threads{job=\"ese-server\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -169,7 +138,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
       },
       "fieldConfig": {
         "defaults": {
@@ -248,11 +217,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(go_goroutines{instance=\"ese-server:2000\"}[$__interval])",
+          "expr": "changes(go_goroutines{job=\"ese-server\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -268,7 +237,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
       },
       "fieldConfig": {
         "defaults": {
@@ -347,11 +316,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "go_memstats_heap_alloc_bytes{instance=\"ese-server:2000\"}",
+          "expr": "go_memstats_heap_alloc_bytes{job=\"ese-server\"}",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -367,7 +336,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
       },
       "fieldConfig": {
         "defaults": {
@@ -446,11 +415,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(process_open_fds{instance=\"ese-server:2000\"}[$__interval])",
+          "expr": "changes(process_open_fds{job=\"ese-server\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -479,7 +448,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
       },
       "description": "Number of health pings made to the server",
       "fieldConfig": {
@@ -559,11 +528,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(health_ping_count{instance=\"ese-server:2000\"}[$__interval])",
+          "expr": "changes(health_ping_count{job=\"ese-server\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -579,7 +548,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
       },
       "description": "No. of pings made to the `POST /event` endpoint. This will push a singular event to the server.",
       "fieldConfig": {
@@ -659,11 +628,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(add_event_ping_count{instance=\"ese-server:2000\"}[$__interval])",
+          "expr": "changes(add_event_ping_count{job=\"ese-server\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -679,7 +648,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
       },
       "description": "No. of pings made to the `POST /events` endpoint. This os called when multiple events are pushed in a single request to the server.",
       "fieldConfig": {
@@ -759,11 +728,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(add_events_ping_count{instance=\"ese-server:2000\"}[$__interval])",
+          "expr": "changes(add_events_ping_count{job=\"ese-server\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -779,7 +748,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
+        "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
       },
       "description": "No. of requests handled by get events handler",
       "fieldConfig": {
@@ -859,11 +828,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
+            "uid": "eb456ae6-04f7-4a52-83a1-edf61149e6ff"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "changes(get_events_ping_count{instance=\"ese-server:2000\"}[$__interval])",
+          "expr": "changes(get_events_ping_count{job=\"ese-server\"}[$__interval])",
           "fullMetaSearch": false,
           "includeNullMetadata": false,
           "instant": false,
@@ -877,7 +846,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "",
+  "refresh": "5s",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -891,6 +860,6 @@
   "timezone": "",
   "title": "ESE Server Metrics",
   "uid": "c33c4d99-3f05-4ec4-a651-7c1398f06391",
-  "version": 2,
+  "version": 9,
   "weekStart": ""
 }

@@ -13,13 +13,7 @@ import (
 )
 
 type Config struct {
-	Server ServerConfig `yaml:"server"`
-	Redis  RedisConfig  `yaml:"redis"`
-}
-
-type ServerConfig struct {
-	Port int    `yaml:"port"`
-	Url  string `yaml:"url"`
+	Redis RedisConfig `yaml:"redis"`
 }
 
 type RedisConfig struct {
@@ -32,8 +26,8 @@ func ProvideRedisClient(config RedisConfig) data.RedisClient {
 	return data.ProvideRedisClient(config.Url, config.Port, config.ExpiryInMinutes)
 }
 
-func ProvideServer(config ServerConfig, redisClient *data.RedisClient) application.Server {
-	address := fmt.Sprintf("%s:%d", config.Url, config.Port)
+func ProvideServer(server_port string, redisClient *data.RedisClient) application.Server {
+	address := fmt.Sprintf(":%s", server_port)
 	return application.ProvideServer(redisClient, address)
 }
 

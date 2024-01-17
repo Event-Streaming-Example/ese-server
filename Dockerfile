@@ -4,11 +4,13 @@ LABEL ese.image.author="saumyabhatt10642"
 
 ENV GIN_MODE=release
 
-RUN mkdir /app
-COPY src/ /app
-WORKDIR /app
+WORKDIR /src
+
+COPY ./src .
 
 RUN go get .
 RUN go build -o server .
 
-CMD [ "/app/server" ]
+EXPOSE $SERVER_PORT
+
+CMD [ "./server" ]
