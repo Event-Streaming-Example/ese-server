@@ -20,7 +20,7 @@ type Server struct {
 }
 
 func ProvideServer(redisClient *data.RedisClient, address string) Server {
-	router := provideRouter(redisClient)
+	router := provideRouter(redisClient, address)
 	server := http.Server{
 		Addr:    address,
 		Handler: &router,
@@ -32,21 +32,22 @@ func ProvideServer(redisClient *data.RedisClient, address string) Server {
 	}
 }
 
-func provideRouter(redisClient *data.RedisClient) gin.Engine {
+func provideRouter(redisClient *data.RedisClient, address string) gin.Engine {
 	prometheus.MustRegister(healthCounter)
 	prometheus.MustRegister(addEventCounter)
 	prometheus.MustRegister(addEventsCounter)
 	prometheus.MustRegister(getEventsCounter)
 
 	router := gin.Default()
-	usecases := Usecases{
+	controller := Controller{
 		Storage: redisClient,
+		Address: address,
 	}
 
-	router.GET("/", usecases.Health)
-	router.GET("/events", usecases.GetEventLogs)
-	router.POST("/event", usecases.AddEvent)
-	router.POST("/events", usecases.AddEvents)
+	router.GET("/", controller.Health)
+	router.GET("/events", controller.GetEventLogs)
+	router.POST("/event", controller.AddEvent)
+	router.POST("/events", controller.AddEvents)
 	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	return *router

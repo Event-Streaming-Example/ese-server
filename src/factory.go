@@ -26,8 +26,8 @@ func ProvideRedisClient(config RedisConfig) data.RedisClient {
 	return data.ProvideRedisClient(config.Url, config.Port, config.ExpiryInMinutes)
 }
 
-func ProvideServer(server_port string, redisClient *data.RedisClient) application.Server {
-	address := fmt.Sprintf(":%s", server_port)
+func ProvideServer(serverPort string, redisClient *data.RedisClient) application.Server {
+	address := fmt.Sprintf(":%s", serverPort)
 	return application.ProvideServer(redisClient, address)
 }
 

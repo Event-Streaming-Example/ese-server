@@ -8,22 +8,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Usecases struct {
+type Controller struct {
 	Storage *data.RedisClient
+	Address string
 }
 
-func (controller *Usecases) Health(c *gin.Context) {
+func (controller *Controller) Health(c *gin.Context) {
 	healthCounter.Inc()
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "Server running"})
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Server running @" + controller.Address})
 }
 
-func (usecases *Usecases) GetEventLogs(c *gin.Context) {
+func (usecases *Controller) GetEventLogs(c *gin.Context) {
 	getEventsCounter.Inc()
 	data := usecases.Storage.GetAllEvents()
 	c.IndentedJSON(http.StatusOK, data)
 }
 
-func (controller *Usecases) AddEvent(c *gin.Context) {
+func (controller *Controller) AddEvent(c *gin.Context) {
 	addEventCounter.Inc()
 	var newEvent data.Event
 	if err := c.BindJSON(&newEvent); err != nil {
@@ -34,7 +35,7 @@ func (controller *Usecases) AddEvent(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newEvent)
 }
 
-func (controller *Usecases) AddEvents(c *gin.Context) {
+func (controller *Controller) AddEvents(c *gin.Context) {
 	addEventsCounter.Inc()
 	var newEvents data.MultipleEvents
 	if err := c.BindJSON(&newEvents); err != nil {
