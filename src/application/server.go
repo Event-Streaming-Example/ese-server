@@ -8,6 +8,7 @@ import (
 
 	"ese/server/data"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -39,6 +40,12 @@ func provideRouter(redisClient *data.RedisClient, address string) gin.Engine {
 	prometheus.MustRegister(getEventsCounter)
 
 	router := gin.Default()
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+	config.AllowMethods = []string{"GET", "POST", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Content-Length"}
+	router.Use(cors.New(config))
+
 	controller := Controller{
 		Storage: redisClient,
 		Address: address,
