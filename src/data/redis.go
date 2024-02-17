@@ -36,9 +36,10 @@ func (r *RedisClient) AddEvent(event Event) {
 		log.Fatal("Error marshaling data:", err)
 		return
 	}
+	eventEntity := event.EventEntity
 
 	// Use HSET to store JSON data in Redis hash
-	err = r.client.HSet(r.context, event.IP, fmt.Sprintf("%d", event.Timestamp), jsonData).Err()
+	err = r.client.HSet(r.context, eventEntity.IP, fmt.Sprintf("%d", eventEntity.Timestamp), jsonData).Err()
 	if err != nil {
 		log.Fatal("Error storing data in Redis:", err)
 		return
@@ -46,7 +47,7 @@ func (r *RedisClient) AddEvent(event Event) {
 
 	// Set expiration for the key
 	expirationTime := time.Duration(r.expiryInMinutes) * time.Minute
-	err = r.client.Expire(r.context, event.IP, expirationTime).Err()
+	err = r.client.Expire(r.context, eventEntity.IP, expirationTime).Err()
 	if err != nil {
 		log.Fatal("Error setting expiration:", err)
 		return
@@ -64,13 +65,14 @@ func (r *RedisClient) AddEvents(events []Event) {
 			log.Println("Error marshaling data:", err)
 			continue
 		}
+		eventEntity := event.EventEntity
 
 		// Use HSET to store JSON data in Redis hash in the pipeline
-		pipe.HSet(r.context, event.IP, fmt.Sprintf("%d", event.Timestamp), jsonData)
+		pipe.HSet(r.context, eventEntity.IP, fmt.Sprintf("%d", eventEntity.Timestamp), jsonData)
 
 		// Set expiration for the key in the pipeline
 		expirationTime := time.Duration(r.expiryInMinutes) * time.Minute
-		pipe.Expire(r.context, event.IP, expirationTime)
+		pipe.Expire(r.context, eventEntity.IP, expirationTime)
 	}
 
 	// Execute the pipeline

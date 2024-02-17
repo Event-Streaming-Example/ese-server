@@ -2,6 +2,7 @@ package application
 
 import (
 	"net/http"
+	"time"
 
 	"ese/server/data"
 
@@ -26,22 +27,41 @@ func (usecases *Controller) GetEventLogs(c *gin.Context) {
 
 func (controller *Controller) AddEvent(c *gin.Context) {
 	addEventCounter.Inc()
-	var newEvent data.Event
-	if err := c.BindJSON(&newEvent); err != nil {
+	var newEventEntity data.EventEntity
+	if err := c.BindJSON(&newEventEntity); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Bad data schema passed"})
 		return
 	}
-	controller.Storage.AddEvent(newEvent)
-	c.IndentedJSON(http.StatusCreated, newEvent)
+	metaData := data.EventMetaData{
+		ServerTimestamp: time.Now().Unix(),
+	}
+	event := data.Event{
+		EventEntity:   newEventEntity,
+		EventMetaData: metaData,
+	}
+	controller.Storage.AddEvent(event)
+	c.IndentedJSON(http.StatusCreated, event)
 }
 
 func (controller *Controller) AddEvents(c *gin.Context) {
 	addEventsCounter.Inc()
-	var newEvents data.MultipleEvents
-	if err := c.BindJSON(&newEvents); err != nil {
+	var events []data.Event
+	var newEventEntities data.MultipleEventEntities
+	if err := c.BindJSON(&newEventEntities); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Bad data schema passed"})
 		return
 	}
-	controller.Storage.AddEvents(newEvents.Events)
-	c.IndentedJSON(http.StatusOK, newEvents)
+	for _, eventEntity := range newEventEntities.EventEntity {
+		metaData := data.EventMetaData{
+			ServerTimestamp: time.Now().Unix(),
+		}
+		event := data.Event{
+			EventEntity:   eventEntity,
+			EventMetaData: metaData,
+		}
+		events = append(events, event)
+	}
+
+	controller.Storage.AddEvents(events)
+	c.IndentedJSON(http.StatusOK, events)
 }

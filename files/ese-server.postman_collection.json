@@ -1,0 +1,145 @@
+{
+	"info": {
+		"_postman_id": "229d5446-3df1-447e-a751-138b867294e4",
+		"name": "ese-server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11208117"
+	},
+	"item": [
+		{
+			"name": "Health Point",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server_url}}/",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "Simple endpoint to check if the server is up and running or not."
+			},
+			"response": []
+		},
+		{
+			"name": "Push a single event",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"event_type\": \"CLICK_STREAM_EVENT\",\n    \"timestamp\": 1704180422410,\n    \"ip\": \"103.191.91.57\",\n    \"data\": {\n        \"event\": \"KEY_PRESS_EVENT\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/event",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"event"
+					]
+				},
+				"description": "This endpoint pushes a single event to the BE server.\n\nThe response would be as follows:\n\n``` json\n{\n    \"entity\": {\n        \"event_type\": \"CLICK_STREAM_EVENT\",\n        \"timestamp\": 1704180422410,\n        \"ip\": \"103.191.91.57\",\n        \"data\": {\n            \"event\": \"KEY_PRESS_EVENT\"\n        }\n    },\n    \"meta_data\": {\n        \"server_timestamp\": 1708165966\n    }\n}\n\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "Push multiple events",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"events\" :[\n        {\n    \"event_type\": \"CLICK_STREAM_EVENT\",\n    \"timestamp\": 1704180422410,\n    \"ip\": \"103.191.91.54\",\n    \"data\": {\n        \"event\": \"KEY_PRESS_EVENT\"\n    }\n},\n{\n    \"eventType\": \"CLICK_STREAM_EVENT\",\n    \"timestamp\": 1704180422412,\n    \"ip\": \"103.191.91.54\",\n    \"data\": {\n        \"event\": \"KEY_PRESS_EVENT\"\n    }\n}\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{server_url}}/events",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"events"
+					]
+				},
+				"description": "This endpoint helps push multiple events in one push to the BE. This will be useful when we do a buffered push from the frontend to reduce multiple calls.\n\nThe response here would be as follows:\n\n``` json\n[\n    {\n        \"entity\": {\n            \"event_type\": \"CLICK_STREAM_EVENT\",\n            \"timestamp\": 1704180422410,\n            \"ip\": \"103.191.91.54\",\n            \"data\": {\n                \"event\": \"KEY_PRESS_EVENT\"\n            }\n        },\n        \"meta_data\": {\n            \"server_timestamp\": 1708165987\n        }\n    },\n    {\n        \"entity\": {\n            \"event_type\": \"\",\n            \"timestamp\": 1704180422412,\n            \"ip\": \"103.191.91.54\",\n            \"data\": {\n                \"event\": \"KEY_PRESS_EVENT\"\n            }\n        },\n        \"meta_data\": {\n            \"server_timestamp\": 1708165987\n        }\n    }\n]\n\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "Get all events",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server_url}}/events",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"events"
+					]
+				},
+				"description": "This endpoint will be queried by the consumer to fetch all the events that have been emitted by the FE.\n\nThe response would be as follows:\n\n``` json\n[\n    {\n        \"ip\": \"103.191.91.54\",\n        \"event_logs\": [\n            {\n                \"entity\": {\n                    \"event_type\": \"CLICK_STREAM_EVENT\",\n                    \"timestamp\": 1704180422410,\n                    \"ip\": \"103.191.91.54\",\n                    \"data\": {\n                        \"event\": \"KEY_PRESS_EVENT\"\n                    }\n                },\n                \"meta_data\": {\n                    \"server_timestamp\": 1708165987\n                }\n            },\n            {\n                \"entity\": {\n                    \"event_type\": \"\",\n                    \"timestamp\": 1704180422412,\n                    \"ip\": \"103.191.91.54\",\n                    \"data\": {\n                        \"event\": \"KEY_PRESS_EVENT\"\n                    }\n                },\n                \"meta_data\": {\n                    \"server_timestamp\": 1708165987\n                }\n            }\n        ]\n    },\n    {\n        \"ip\": \"103.191.91.57\",\n        \"event_logs\": [\n            {\n                \"entity\": {\n                    \"event_type\": \"CLICK_STREAM_EVENT\",\n                    \"timestamp\": 1704180422410,\n                    \"ip\": \"103.191.91.57\",\n                    \"data\": {\n                        \"event\": \"KEY_PRESS_EVENT\"\n                    }\n                },\n                \"meta_data\": {\n                    \"server_timestamp\": 1708165966\n                }\n            }\n        ]\n    }\n]\n\n```"
+			},
+			"response": []
+		},
+		{
+			"name": "Prometheus Metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{server_url}}/metrics",
+					"host": [
+						"{{server_url}}"
+					],
+					"path": [
+						"metrics"
+					]
+				},
+				"description": "This endpoint is what Prometheus will poll to get the timeseries data that it needs."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "server_url",
+			"value": "http://localhost:2000",
+			"type": "string"
+		}
+	]
+}
