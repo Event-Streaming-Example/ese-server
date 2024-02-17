@@ -18,11 +18,11 @@ func shutDownResources(client *data.RedisClient, server *application.Server) {
 }
 
 func main() {
-	// PORT := os.Getenv("SERVER_PORT")
+	PORT := os.Getenv("SERVER_PORT")
 
 	config := ProvideConfig()
 	redisClient := ProvideRedisClient(config.Redis)
-	server := ProvideServer("2000", &redisClient)
+	server := ProvideServer(PORT, &redisClient)
 
 	go func() {
 		server.Start()
