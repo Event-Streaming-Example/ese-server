@@ -23,7 +23,7 @@ func main() {
 	app.Initialize(config, PORT)
 
 	go func() {
-		app.Start(PORT)
+		app.Start()
 	}()
 
 	quit := make(chan os.Signal)

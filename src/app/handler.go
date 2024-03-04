@@ -15,18 +15,18 @@ type Handler struct {
 }
 
 func (h *Handler) GetHealth(c *gin.Context) {
-	healthCounter.Inc()
+	HealthCounter.Inc()
 	c.IndentedJSON(http.StatusOK, gin.H{"message": "Server running @" + h.Address})
 }
 
 func (h *Handler) GetEvents(c *gin.Context) {
-	getEventsCounter.Inc()
+	GetEventsCounter.Inc()
 	data := h.RedisClient.GetAllEvents()
 	c.IndentedJSON(http.StatusOK, data)
 }
 
 func (h *Handler) AddEvent(c *gin.Context) {
-	addEventCounter.Inc()
+	AddEventCounter.Inc()
 	var newEventEntity models.EventEntity
 	if err := c.BindJSON(&newEventEntity); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Bad data schema passed"})
@@ -44,7 +44,7 @@ func (h *Handler) AddEvent(c *gin.Context) {
 }
 
 func (h *Handler) AddEvents(c *gin.Context) {
-	addEventsCounter.Inc()
+	AddEventsCounter.Inc()
 	var events []models.Event
 	var newEventEntities MultipleEventRequest
 	if err := c.BindJSON(&newEventEntities); err != nil {
