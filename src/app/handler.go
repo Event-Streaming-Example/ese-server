@@ -1,67 +1,67 @@
-package application
+package app
 
 import (
 	"net/http"
 	"time"
 
-	"ese/server/data"
-
+	"ese.server/models"
+	"ese.server/redis"
 	"github.com/gin-gonic/gin"
 )
 
-type Controller struct {
-	Storage *data.RedisClient
-	Address string
+type Handler struct {
+	RedisClient *redis.RedisClient
+	Address     string
 }
 
-func (controller *Controller) Health(c *gin.Context) {
+func (h *Handler) GetHealth(c *gin.Context) {
 	healthCounter.Inc()
-	c.IndentedJSON(http.StatusOK, gin.H{"message": "Server running @" + controller.Address})
+	c.IndentedJSON(http.StatusOK, gin.H{"message": "Server running @" + h.Address})
 }
 
-func (usecases *Controller) GetEventLogs(c *gin.Context) {
+func (h *Handler) GetEvents(c *gin.Context) {
 	getEventsCounter.Inc()
-	data := usecases.Storage.GetAllEvents()
+	data := h.RedisClient.GetAllEvents()
 	c.IndentedJSON(http.StatusOK, data)
 }
 
-func (controller *Controller) AddEvent(c *gin.Context) {
+func (h *Handler) AddEvent(c *gin.Context) {
 	addEventCounter.Inc()
-	var newEventEntity data.EventEntity
+	var newEventEntity models.EventEntity
 	if err := c.BindJSON(&newEventEntity); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Bad data schema passed"})
 		return
 	}
-	metaData := data.EventMetaData{
+	metaData := models.EventMetaData{
 		ServerTimestamp: time.Now().Unix(),
 	}
-	event := data.Event{
+	event := models.Event{
 		EventEntity:   newEventEntity,
 		EventMetaData: metaData,
 	}
-	controller.Storage.AddEvent(event)
+	h.RedisClient.AddEvent(event)
 	c.IndentedJSON(http.StatusCreated, event)
 }
 
-func (controller *Controller) AddEvents(c *gin.Context) {
+func (h *Handler) AddEvents(c *gin.Context) {
 	addEventsCounter.Inc()
-	var events []data.Event
-	var newEventEntities data.MultipleEventEntities
+	var events []models.Event
+	var newEventEntities MultipleEventRequest
 	if err := c.BindJSON(&newEventEntities); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Bad data schema passed"})
 		return
 	}
 	for _, eventEntity := range newEventEntities.EventEntity {
-		metaData := data.EventMetaData{
+		metaData := models.EventMetaData{
 			ServerTimestamp: time.Now().Unix(),
 		}
-		event := data.Event{
+		event := models.Event{
 			EventEntity:   eventEntity,
 			EventMetaData: metaData,
 		}
 		events = append(events, event)
 	}
 
-	controller.Storage.AddEvents(events)
-	c.IndentedJSON(http.StatusOK, events)
+	h.RedisClient.AddEvents(events)
+	c.IndentedJSON(http.StatusCreated, events)
 }

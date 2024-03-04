@@ -1,4 +1,4 @@
-package data
+package redis
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 	"log"
 	"time"
 
+	"ese.server/models"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -16,21 +17,16 @@ type RedisClient struct {
 	expiryInMinutes int
 }
 
-func ProvideRedisClient(url string, port int, expiryInMinutes int) RedisClient {
-	address := fmt.Sprintf("%s:%d", url, port)
+func (r *RedisClient) Initialize(config Config) {
 	client := redis.NewClient(&redis.Options{
-		Addr:     address,
-		Password: "",
-		DB:       0,
+		Addr: fmt.Sprintf("%s:%d", config.Url, config.Port),
 	})
-	return RedisClient{
-		client:          client,
-		context:         context.Background(),
-		expiryInMinutes: expiryInMinutes,
-	}
+	r.client = client
+	r.context = context.Background()
+	r.expiryInMinutes = config.ExpiryInMinutes
 }
 
-func (r *RedisClient) AddEvent(event Event) {
+func (r *RedisClient) AddEvent(event models.Event) {
 	jsonData, err := json.Marshal(event)
 	if err != nil {
 		log.Fatal("Error marshaling data:", err)
@@ -54,7 +50,7 @@ func (r *RedisClient) AddEvent(event Event) {
 	}
 }
 
-func (r *RedisClient) AddEvents(events []Event) {
+func (r *RedisClient) AddEvents(events []models.Event) {
 	// Start a pipeline
 	pipe := r.client.Pipeline()
 
@@ -92,11 +88,11 @@ func (r *RedisClient) EventExists(ip string) int64 {
 	return exists
 }
 
-func (r *RedisClient) GetAllEvents() []EventIPLog {
-	var result = []EventIPLog{}
+func (r *RedisClient) GetAllEvents() []models.EventIPLog {
+	var result = []models.EventIPLog{}
 	var keys = r.getAllKeys()
 	for _, key := range keys {
-		var eventLogs = []Event{}
+		var eventLogs = []models.Event{}
 		// Use HGETALL to retrieve all fields and values from Redis hash
 		fieldsValues, err := r.client.HGetAll(r.context, key).Result()
 		if err != nil {
@@ -105,7 +101,7 @@ func (r *RedisClient) GetAllEvents() []EventIPLog {
 		}
 		for _, jsonData := range fieldsValues {
 			// Unmarshal JSON data back to Event
-			var retrievedEvent Event
+			var retrievedEvent models.Event
 			err = json.Unmarshal([]byte(jsonData), &retrievedEvent)
 			if err != nil {
 				log.Fatal("Error unmarshaling data:", err)
@@ -113,7 +109,7 @@ func (r *RedisClient) GetAllEvents() []EventIPLog {
 			}
 			eventLogs = append(eventLogs, retrievedEvent)
 		}
-		newEventIpLog := EventIPLog{
+		newEventIpLog := models.EventIPLog{
 			IP:        key,
 			EventLogs: eventLogs,
 		}

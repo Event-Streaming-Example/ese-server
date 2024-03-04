@@ -6,32 +6,30 @@ import (
 	"os/signal"
 	"syscall"
 
-	"ese/server/application"
-	"ese/server/data"
+	"ese.server/app"
 )
 
-func shutDownResources(client *data.RedisClient, server *application.Server) {
+func shutDownResources(app *app.App) {
 	log.Println("Attempting shutting down resources gracefully")
-	server.Stop()
-	client.Destroy()
+	app.Stop()
 	log.Println("Resources shutdown gracefully")
 }
 
 func main() {
 	PORT := os.Getenv("SERVER_PORT")
+	config := app.ParseConfig()
 
-	config := ProvideConfig()
-	redisClient := ProvideRedisClient(config.Redis)
-	server := ProvideServer(PORT, &redisClient)
+	app := &app.App{}
+	app.Initialize(config, PORT)
 
 	go func() {
-		server.Start()
+		app.Start(PORT)
 	}()
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	shutDownResources(&redisClient, &server)
+	shutDownResources(app)
 
 }
