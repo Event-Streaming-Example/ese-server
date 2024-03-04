@@ -1,6 +1,5 @@
 version: "1.2"
 services:
-
   # SERVER 1 RUNNING ON PORT 2001
   ese-server1:
     image: saumyabhatt10642/ese-server
@@ -11,19 +10,19 @@ services:
     depends_on:
       - redis-server
 
-# COMMON REDIS RUNNING ON PORT 6379
+  # COMMON REDIS RUNNING ON PORT 6379
   redis-server:
     image: redis
     ports:
       - "6379:6379"
 
-# COMMON PROMETHEUS SERVER RUNNING ON PORT 9090 [For scrapping targets, look at prometheus.yml]
+  # COMMON PROMETHEUS SERVER RUNNING ON PORT 9090 [For scrapping targets, look at prometheus.yml]
   prometheus-server:
     image: prom/prometheus
     ports:
       - "9090:9090"
     volumes:
-      - ./src/properties/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./src/app/properties/prometheus.yml:/etc/prometheus/prometheus.yml
 
   # COMMON GRAFANA SERVER RUNNING ON PORT 3000
   grafana-server:
