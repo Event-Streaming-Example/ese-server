@@ -28,7 +28,7 @@ func (a *App) Initialize(config Config, port string) {
 	a.setupCounters()
 
 	router := gin.Default()
-	a.setupRouters(router)
+	a.setupRouter(router)
 	a.setupMiddleware(router)
 
 	a.Server = &http.Server{
@@ -79,7 +79,7 @@ func (a *App) setupMiddleware(router *gin.Engine) {
 	router.Use(cors.New(config))
 }
 
-func (a *App) setupRouters(router *gin.Engine) {
+func (a *App) setupRouter(router *gin.Engine) {
 	handler := Handler{
 		RedisClient: a.RedisClient,
 		Address:     a.Address,
