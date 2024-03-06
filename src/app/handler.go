@@ -53,7 +53,7 @@ func (h *Handler) AddEvents(c *gin.Context) {
 	}
 	for _, eventEntity := range newEventEntities.EventEntity {
 		metaData := models.EventMetaData{
-			ServerTimestamp: time.Now().UnixNano() / int64(time.Millisecond),
+			ServerTimestamp: time.Now().UnixMilli(),
 		}
 		event := models.Event{
 			EventEntity:   eventEntity,
