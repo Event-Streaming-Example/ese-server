@@ -33,7 +33,7 @@ func (h *Handler) AddEvent(c *gin.Context) {
 		return
 	}
 	metaData := models.EventMetaData{
-		ServerTimestamp: time.Now().Unix(),
+		ServerTimestamp: h.getCurrentTimeInMilli(),
 	}
 	event := models.Event{
 		EventEntity:   newEventEntity,
@@ -53,7 +53,7 @@ func (h *Handler) AddEvents(c *gin.Context) {
 	}
 	for _, eventEntity := range newEventEntities.EventEntity {
 		metaData := models.EventMetaData{
-			ServerTimestamp: time.Now().UnixMilli(),
+			ServerTimestamp: h.getCurrentTimeInMilli(),
 		}
 		event := models.Event{
 			EventEntity:   eventEntity,
@@ -64,4 +64,8 @@ func (h *Handler) AddEvents(c *gin.Context) {
 
 	h.RedisClient.AddEvents(events)
 	c.IndentedJSON(http.StatusCreated, events)
+}
+
+func (h *Handler) getCurrentTimeInMilli() int64 {
+	return time.Now().UnixMilli()
 }
