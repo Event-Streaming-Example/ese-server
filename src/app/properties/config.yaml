@@ -1,8 +1,8 @@
 redis:
   url: redis-server
   port: 6379
-  expiryInMinutes: 20
+  expiryInMinutes: 10
 # redis:
 #   url: 127.0.0.1
 #   port: 6379
-#   expiryInMinutes: 20
+#   expiryInMinutes: 10

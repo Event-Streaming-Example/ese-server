@@ -32,10 +32,9 @@ func (r *RedisClient) AddEvent(event models.Event) {
 		log.Fatal("Error marshaling data:", err)
 		return
 	}
-	eventEntity := event.EventEntity
 
 	// Use HSET to store JSON data in Redis hash
-	err = r.client.HSet(r.context, eventEntity.IP, fmt.Sprintf("%d", eventEntity.Timestamp), jsonData).Err()
+	err = r.client.HSet(r.context, event.Ip, fmt.Sprintf("%d", event.ClientTimestamp), jsonData).Err()
 	if err != nil {
 		log.Fatal("Error storing data in Redis:", err)
 		return
@@ -43,7 +42,7 @@ func (r *RedisClient) AddEvent(event models.Event) {
 
 	// Set expiration for the key
 	expirationTime := time.Duration(r.expiryInMinutes) * time.Minute
-	err = r.client.Expire(r.context, eventEntity.IP, expirationTime).Err()
+	err = r.client.Expire(r.context, event.Ip, expirationTime).Err()
 	if err != nil {
 		log.Fatal("Error setting expiration:", err)
 		return
@@ -61,14 +60,13 @@ func (r *RedisClient) AddEvents(events []models.Event) {
 			log.Println("Error marshaling data:", err)
 			continue
 		}
-		eventEntity := event.EventEntity
 
 		// Use HSET to store JSON data in Redis hash in the pipeline
-		pipe.HSet(r.context, eventEntity.IP, fmt.Sprintf("%d", eventEntity.Timestamp), jsonData)
+		pipe.HSet(r.context, event.Ip, fmt.Sprintf("%d", event.ClientTimestamp), jsonData)
 
 		// Set expiration for the key in the pipeline
 		expirationTime := time.Duration(r.expiryInMinutes) * time.Minute
-		pipe.Expire(r.context, eventEntity.IP, expirationTime)
+		pipe.Expire(r.context, event.Ip, expirationTime)
 	}
 
 	// Execute the pipeline
@@ -88,8 +86,8 @@ func (r *RedisClient) EventExists(ip string) int64 {
 	return exists
 }
 
-func (r *RedisClient) GetAllEvents() []models.EventIPLog {
-	var result = []models.EventIPLog{}
+func (r *RedisClient) GetAllEvents() []models.EventIpLog {
+	var result = []models.EventIpLog{}
 	var keys = r.getAllKeys()
 	for _, key := range keys {
 		var eventLogs = []models.Event{}
@@ -109,8 +107,8 @@ func (r *RedisClient) GetAllEvents() []models.EventIPLog {
 			}
 			eventLogs = append(eventLogs, retrievedEvent)
 		}
-		newEventIpLog := models.EventIPLog{
-			IP:        key,
+		newEventIpLog := models.EventIpLog{
+			Ip:        key,
 			EventLogs: eventLogs,
 		}
 		result = append(result, newEventIpLog)

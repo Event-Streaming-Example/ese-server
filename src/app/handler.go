@@ -27,18 +27,12 @@ func (h *Handler) GetEvents(c *gin.Context) {
 
 func (h *Handler) AddEvent(c *gin.Context) {
 	AddEventCounter.Inc()
-	var newEventEntity models.EventEntity
+	var newEventEntity models.PushEventRequest
 	if err := c.BindJSON(&newEventEntity); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Bad data schema passed"})
 		return
 	}
-	metaData := models.EventMetaData{
-		ServerTimestamp: h.getCurrentTimeInMilli(),
-	}
-	event := models.Event{
-		EventEntity:   newEventEntity,
-		EventMetaData: metaData,
-	}
+	event := h.convertPushEventRequestToEvent(newEventEntity)
 	h.RedisClient.AddEvent(event)
 	c.IndentedJSON(http.StatusCreated, event)
 }
@@ -46,19 +40,13 @@ func (h *Handler) AddEvent(c *gin.Context) {
 func (h *Handler) AddEvents(c *gin.Context) {
 	AddEventsCounter.Inc()
 	var events []models.Event
-	var newEventEntities MultipleEventRequest
+	var newEventEntities models.PushMultipleEventRequest
 	if err := c.BindJSON(&newEventEntities); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "Bad data schema passed"})
 		return
 	}
 	for _, eventEntity := range newEventEntities.EventEntity {
-		metaData := models.EventMetaData{
-			ServerTimestamp: h.getCurrentTimeInMilli(),
-		}
-		event := models.Event{
-			EventEntity:   eventEntity,
-			EventMetaData: metaData,
-		}
+		event := h.convertPushEventRequestToEvent(eventEntity)
 		events = append(events, event)
 	}
 
@@ -68,4 +56,15 @@ func (h *Handler) AddEvents(c *gin.Context) {
 
 func (h *Handler) getCurrentTimeInMilli() int64 {
 	return time.Now().UnixMilli()
+}
+
+func (h *Handler) convertPushEventRequestToEvent(pushEvent models.PushEventRequest) models.Event {
+	return models.Event{
+		EventType:       pushEvent.Event.Type,
+		EventSubType:    pushEvent.Event.SubType,
+		Ip:              pushEvent.IP,
+		ClientTimestamp: pushEvent.Timestamp,
+		ServerTimestamp: h.getCurrentTimeInMilli(),
+		Data:            pushEvent.Data,
+	}
 }
