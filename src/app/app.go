@@ -72,11 +72,19 @@ func (a *App) setupCounters() {
 }
 
 func (a *App) setupMiddleware(router *gin.Engine) {
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"*"}
-	config.AllowMethods = []string{"GET", "POST", "OPTIONS"}
-	config.AllowHeaders = []string{"Origin", "Content-Type", "Content-Length"}
-	router.Use(cors.New(config))
+  config := cors.DefaultConfig()
+  config.AllowOrigins = []string{"*"}  // Adjust origins as needed
+  config.AllowMethods = []string{"GET", "POST", "OPTIONS"}
+  config.AllowHeaders = []string{"Origin", "Content-Type", "Content-Length"}
+  router.Use(cors.New(config))
+
+  // Wildcard route to capture OPTIONS requests
+  router.OPTIONS("/*" , func(c *gin.Context) {
+    c.Writer.Header().Set("Access-Control-Allow-Origin", config.AllowOrigins[0])
+    c.Writer.Header().Set("Access-Control-Allow-Methods", strings.Join(config.AllowMethods, ", "))
+    c.Writer.Header().Set("Access-Control-Allow-Headers", strings.Join(config.AllowHeaders, ", "))
+    c.AbortWithStatus(http.StatusOK)
+  })
 }
 
 func (a *App) setupRouter(router *gin.Engine) {
